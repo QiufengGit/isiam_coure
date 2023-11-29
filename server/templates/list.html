@@ -3,18 +3,30 @@
     <head>
         <title>Messages</title>
         <!-- optional styling to this site -->
-        <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/css/bootstrap-combined.min.css" rel="stylesheet" />
+        <!-- <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/css/bootstrap-combined.min.css" rel="stylesheet" /> -->
     </head>
     <body>
       <div>
-        <h2>Messages</h2>
+        <h2>个人信息采集</h2>
         
         <p>
-          Enter your message below:
+          请在下面输入你的信息:
         </p>
         
         <form action="{@host}/messages" method="post">
-            <input type="text" name="message" value="" required="true" maxlength="6"/>
+            <p>姓名</p>
+            <input type="text" name="username" value="" required="true" maxlength="8"/>
+            <p>学号</p>
+            <input type="text" name="IdNumber" placeholder="请输入正确格式学号！" oninput="checkIdNumber(this)" value="" required="true"/>
+            <span id="idNumberError" style="color: red;"></span>
+            <p>邮箱</p>
+            <input type="text" name="email" placeholder="请输入正确格式邮箱！" onchange="checkEmail(this)" value="" required="true"/>
+            <span id="EmailError" style="color: red;"></span>
+            <p>手机号</p>
+            <input type="text" name="phoneNumber" placeholder="请输入11位手机号！"onchange="checkPhoneNumber(this)" value="" required="true"/>
+            <span id="PhoneNumberError" style="color: red;"></span>
+            <p>个人兴趣</p>
+            <input type="text" name="message" value="" required="true" maxlength="32"/>
             <input type="submit" />
         </form>
 
@@ -35,4 +47,34 @@
     <script src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/js/bootstrap.min.js"></script>
     <script src="http://code.jquery.com/jquery-latest.js"></script>
     <script src="{@host}/script.js"></script>
+    <script>
+      function checkIdNumber(IdNumber) {
+        var pattern = /^[0-9]+$/;
+        var errorMessage = document.getElementById('idNumberError');
+        if (!pattern.test(IdNumber.value)) {
+          errorMessage.textContent = "学号格式不正确!";
+        } else {
+          errorMessage.textContent = "";
+        }
+      }
+      function checkEmail(email) {
+        // 正则表达式模式用于验证邮箱地址的格式
+        var pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        var errorMessage = document.getElementById('EmailError');
+        if (!pattern.test(email.value)) {
+          errorMessage.textContent = "邮箱格式不正确!";
+        } else {
+          errorMessage.textContent = "";
+        }
+      }
+      function checkPhoneNumber(phoneNumber) {
+        var pattern =/^1[3|4|5|6|7|8|9][0-9]\d{8}$/;
+        var errorMessage = document.getElementById('PhoneNumberError');
+        if (!pattern.test(phoneNumber.value)) {
+          errorMessage.textContent = "手机号格式不正确!";
+        } else {
+          errorMessage.textContent = "";
+        }
+      }
+    </script>
 </html>
