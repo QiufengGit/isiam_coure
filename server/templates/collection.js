@@ -10,7 +10,7 @@
 
         "template" : {
             "data" : [
-                {"prompt" : "Text of message", "name" : "text", "value" : ""}
+                {"prompt" : "Text of message", "username":"","IdNumber":"","email":"","phoneNumber":"","hobby":""}
             ]
         }
     }

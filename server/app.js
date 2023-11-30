@@ -149,6 +149,7 @@ function handler(req, res) {
     }
 }
 
+//send-html
 function sendHtmlHome(req, res) {
     var t;
 
@@ -340,13 +341,18 @@ function postAPIItem(req, res) {
     });
 }
 
+//format-html
 function formatHtmlItem(item) {
     var rtn;
 
     rtn = '<dl>\n';
     rtn += '<dt>ID</dt><dd>'+item.id+'</dd>\n';
     rtn += '<dt>DATE</dt><dd>'+item.date+'</dd>\n';
-    rtn += '<dt>MSG</dt><dd>'+item.message+'</dd>';
+    rtn += '<dt>姓名：</dt><dd>'+item.username+'</dd>\n';
+    rtn += '<dt>学号：</dt><dd>'+item.IdNumber+'</dd>\n';
+    rtn += '<dt>邮箱：</dt><dd>'+item.email+'</dd>\n';
+    rtn += '<dt>手机号：</dt><dd>'+item.phoneNumber+'</dd>\n';
+    rtn += '<dt>兴趣爱好：</dt><dd>'+item.hobby+'</dd>';
     rtn += '</dl>\n';
 
     return rtn;
@@ -359,7 +365,7 @@ function formatHtmlList(list) {
     for(i=0,x=list.length;i<x;i++) {
         rtn += '<li>';
         rtn += '<a href="'+root+'/messages/'+list[i].id+'" title="' + list[i].date+'">';
-        rtn += list[i].message;
+        rtn += list[i].username;
         rtn += '</a></li>\n';
     }
     rtn += '</ul>\n';
@@ -375,7 +381,11 @@ function formatAPIList(list) {
         item = {};
         item.href = root + '/api/' + list[i].id;
         item.data = [];
-        item.data.push({name:"text", value:list[i].message});
+        rtn.data.push({name:"username", value:item.username});
+        rtn.data.push({name:"IdNumber", value:item.IdNumber});
+        rtn.data.push({name:"email", value:item.email});
+        rtn.data.push({name:"phoneNumber", value:item.phoneNumber});
+        rtn.data.push({name:"hobby", value:item.hobby});
         item.data.push({name:"date_posted", value:list[i].date});
         rtn.push(item);
     }
@@ -388,7 +398,11 @@ function formatAPIItem(item) {
 
     rtn.href = root + '/api/' + item.id;
     rtn.data = [];
-    rtn.data.push({name:"text", value:item.message});
+    rtn.data.push({name:"username", value:item.username});
+    rtn.data.push({name:"IdNumber", value:item.IdNumber});
+    rtn.data.push({name:"email", value:item.email});
+    rtn.data.push({name:"phoneNumber", value:item.phoneNumber});
+    rtn.data.push({name:"hobby", value:item.hobby});
     rtn.data.push({name:"date_posted", value:item.date});
 
     return "[" + JSON.stringify(rtn, null, 4) + "]";
