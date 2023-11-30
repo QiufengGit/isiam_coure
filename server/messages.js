@@ -79,9 +79,15 @@ function addItem(item) {
 function updateItem(id, item) {
     var current;
 
-    current = getItem(id);
-    current.message = item.message;
+    current = getItem(id).item;
+    //临时存储
+    current.username = item.username;
+    current.IdNumber = item.IdNumber;
+    current.email = item.email;
+    current.phoneNumber = item.phoneNumber;
+    current.hobby = item.hobby;
     current.date = new Date();
+    console.log(current)
     fs.writeFileSync(folder+id, JSON.stringify(current));
     return getItem(id);
 }

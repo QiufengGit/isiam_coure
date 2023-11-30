@@ -295,7 +295,14 @@ function updateAPIItem(req, res, id) {
     req.on('end', function() {
         try {
             msg = JSON.parse(body);
-            item = messages('update', id, {message:msg.template.data[0].value}).item;
+            temp_item={
+                username:msg.template.data[0].username,
+                IdNumber:msg.template.data[0].IdNumber,
+                email:msg.template.data[0].email,
+                phoneNumber:msg.template.data[0].email,
+                hobby:msg.template.data[0].hobby
+            }
+            item = messages('update', id, temp_item).item;
             sendAPIItem(req, res, id);
         }
         catch(ex) {
@@ -331,7 +338,14 @@ function postAPIItem(req, res) {
     req.on('end', function() {
         try {
             msg = JSON.parse(body);
-            item = messages('add', {message:msg.template.data[0].value}).item;
+            temp_item={
+                username:msg.template.data[0].username,
+                IdNumber:msg.template.data[0].IdNumber,
+                email:msg.template.data[0].email,
+                phoneNumber:msg.template.data[0].email,
+                hobby:msg.template.data[0].hobby
+            }
+            item = messages('add', temp_item).item;
             res.writeHead(201, 'Created', {'Location' : root + '/api/' + item.id});
             res.end();
         }
@@ -381,11 +395,11 @@ function formatAPIList(list) {
         item = {};
         item.href = root + '/api/' + list[i].id;
         item.data = [];
-        rtn.data.push({name:"username", value:item.username});
-        rtn.data.push({name:"IdNumber", value:item.IdNumber});
-        rtn.data.push({name:"email", value:item.email});
-        rtn.data.push({name:"phoneNumber", value:item.phoneNumber});
-        rtn.data.push({name:"hobby", value:item.hobby});
+        item.data.push({name:"username", value:list[i].username});
+        item.data.push({name:"IdNumber", value:list[i].IdNumber});
+        item.data.push({name:"email", value:list[i].email});
+        item.data.push({name:"phoneNumber", value:list[i].phoneNumber});
+        item.data.push({name:"hobby", value:list[i].hobby});
         item.data.push({name:"date_posted", value:list[i].date});
         rtn.push(item);
     }
