@@ -9,6 +9,7 @@ var crypto = require('crypto');
 var querystring = require('querystring');
 var templates = require('./templates.js');
 var messages = require('./messages.js');
+var jwt = require('jsonwebtoken');
 
 var port = (process.env.PORT || 1337);
 var root = '';
@@ -29,6 +30,43 @@ var cjHeaders = {
 };
 var reAPIList = new RegExp('^\/api\/$', 'i');
 var reAPIItem = new RegExp('^\/api\/.*', 'i');
+
+const SECRET_KEY = 'MY_SECRET_KEY';
+let nowInSeconds = Math.floor(Date.now() / 1000);//默认值 以秒为单位的时间戳
+let payload = {
+    iss: 'cxx',
+    sub: 'node isiam',
+    aud: 'user1',
+    iat: nowInSeconds
+};
+// creating access-token
+const accessToken = jwt.sign(payload, SECRET_KEY, { algorithm: 'HS256', expiresIn: '1h' });
+console.log(accessToken)
+jwt.verify(accessToken, SECRET_KEY, { algorithm: 'HS256' }, (err, data) => {
+    if (err) {
+        // console.log(err);
+        // res.status(403).json({ message: 'Forbidden' });
+    }
+    else {
+        // console.log(data);
+        // res.status(200).json({ message: 'welcome to protected api service' });
+        console.log("welcome!")
+    }
+});
+// util method
+function ensureToken(req, res, next) {
+    const bearerHeader = req.headers['authorization'];
+    // console.log('Bearer header received = ' + bearerHeader)
+    if (typeof bearerHeader !== 'undefined') {
+        const bearer = bearerHeader.split(' ');
+        const bearerToken = bearer[1];
+        req.token = bearerToken;
+        next();
+    } else {
+        res.status(403).json({ message: 'Forbidden' });
+    }
+}
+
 
 function handler(req, res) {
     var segments, i, x, parts, flg;
@@ -299,7 +337,7 @@ function updateAPIItem(req, res, id) {
                 username:msg.template.data[0].username,
                 IdNumber:msg.template.data[0].IdNumber,
                 email:msg.template.data[0].email,
-                phoneNumber:msg.template.data[0].email,
+                phoneNumber:msg.template.data[0].phoneNumber,
                 hobby:msg.template.data[0].hobby
             }
             item = messages('update', id, temp_item).item;
